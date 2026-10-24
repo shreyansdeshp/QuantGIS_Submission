@@ -1,0 +1,26 @@
+# Serving. Bounded rather than hard-pinned: an exact pin of a version that
+# predates your Python build will try to compile from source and fail.
+# Record the versions you actually used in your README.
+fastapi>=0.115,<1.0
+uvicorn>=0.32,<1.0
+
+# pydantic comes in with fastapi; let it resolve a build that matches your Python.
+
+# selfcheck.py uses only the standard library.
+
+# Serving: shared encoder + featurizer + heads (model.py, encoder.py, features.py).
+# EXACT pins: artifacts/v2/model.pkl is a pickle written by these versions,
+# and scikit-learn pickles are not guaranteed to load in any other version.
+# They need Python 3.11 or newer (developed and tested on 3.12).
+numpy==2.4.6
+scikit-learn==1.9.0
+scipy==1.18.0
+onnxruntime>=1.19,<2.0
+transformers>=4.57,<5.0          # tokenizer only at serve time (no torch needed)
+
+# Used to BUILD artifacts, not needed to serve from the committed artifacts/:
+#   torch, onnx, onnxruntime's quantization extras (export_encoder.py)
+# Versions actually used in this repo: transformers==4.57.6 (pinned below
+# torch's >=2.6 requirement since this box has torch 2.5.1+cu121), onnx,
+# onnxruntime (CPU build), scikit-learn==1.9.0, numpy==2.4.6.
+
